@@ -96,7 +96,7 @@ public class Main {
         }
 
         JFrame app = new JFrame("Visualizer");
-        app.setSize(500, 500);
+        app.setSize(1000, 1000);
         app.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         Renderer renderer = new Renderer(points);
 
@@ -139,28 +139,18 @@ public class Main {
         for (DrawableObject obj : renderer.objects) {
             // we will now normalize each data value, since we knowthe min and max in each dimension.
             // this will result is a value from [-1,1] which will we scale up to 500
-            int a = 0, b= 500;
+            int a = 900, b= 900;
 
             if (points == 1) {
                 d1Object d1 = (d1Object) obj;
                 for (int i = 0; i < d1.timestamps.length; i++) {
                     d1.x[i] = BigDecimal.valueOf(a + (d1.x[i].doubleValue() - minX) * (b - a) / (maxX - minX));
-                    System.out.println(d1);
                 }
             } else if (points == 2) {
                 d2Object d2 = (d2Object) obj;
                 for (int i = 0; i < d2.timestamps.length; i++) {
                     d2.x[i] = BigDecimal.valueOf(a + (d2.x[i].doubleValue() - minX) * (b - a) / (maxX - minX));
                     d2.y[i] = BigDecimal.valueOf(a + (d2.y[i].doubleValue() - minY) * (b - a) / (maxY - minY));
-                    System.out.println(d2);
-                }
-            } else {
-                d3Object d3 = (d3Object) obj;
-                for (int i = 0; i < d3.timestamps.length; i++) {
-                    d3.x[i] = BigDecimal.valueOf(a + (d3.x[i].doubleValue() - minX) * (b - a) / (maxX - minX));
-                    d3.y[i] = BigDecimal.valueOf(a + (d3.y[i].doubleValue() - minY) * (b - a) / (maxY - minY));
-                    d3.z[i] = BigDecimal.valueOf(a + (d3.z[i].doubleValue() - minZ) * (b - a) / (maxZ - minZ));
-                    System.out.println(d3);
                 }
             }
         }

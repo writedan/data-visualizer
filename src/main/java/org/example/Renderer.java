@@ -29,23 +29,28 @@ public class Renderer extends JPanel {
         g2d.fillRect(0, 0, getWidth(), getHeight());
 
         for (DrawableObject doj : objects) {
+            System.out.println(doj);
             if (dimensions == 1) {
                 int x = ((d1Object)doj).x[0].intValue();
 
                 g2d.setColor(Color.yellow);
-                g2d.fillRect(x, getHeight()/2, 20, 20);
+                g2d.fillRect(x, getHeight()/2, 40, 40);
 
             } else if (dimensions == 2) {
                 int x = ((d2Object)doj).x[0].intValue();
                 int y = ((d2Object)doj).y[0].intValue();
 
                 g2d.setColor(Color.red);
-                g2d.fillRect(x, y, 20, 20);
-            } else {
-                int x = ((d3Object)doj).x[0].intValue();
-                int y = ((d3Object)doj).y[0].intValue();
-                int z = ((d3Object)doj).z[0].intValue();
+                g2d.fillRect(x, y, 40, 40);
             }
+        }
+
+        g2d.setColor(Color.red);
+        g2d.fillRect(getWidth()/2, 0, 1, getHeight());
+
+        if (dimensions > 1) {
+            g2d.setColor(Color.green);
+            g2d.fillRect(0, getHeight()/2, getWidth(), 1);
         }
     }
 }

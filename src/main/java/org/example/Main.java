@@ -102,8 +102,67 @@ public class Main {
 
         // now that we have data in the registry, we need to covert it to a [-x, x] scale for each dimension
 
+        double maxX = Double.MIN_VALUE, maxY = Double.MIN_VALUE, maxZ = Double.MIN_VALUE;
+        double minX = Double.MAX_VALUE, minY = Double.MAX_VALUE, minZ = Double.MAX_VALUE;
         for (DrawableObject obj : registry.values()) {
+            if (points == 1) {
+                for (BigDecimal x : ((d1Object)obj).x) {
+                    if (x.doubleValue() > maxX) maxX = x.doubleValue();
+                    if (x.doubleValue() < minX) minX = x.doubleValue();
+                }
+            } else if (points == 2) {
+                for (BigDecimal x : ((d1Object)obj).x) {
+                    if (x.doubleValue() > maxX) maxX = x.doubleValue();
+                    if (x.doubleValue() < minX) minX = x.doubleValue();
+                }
+                for (BigDecimal y : ((d2Object)obj).y) {
+                    if (y.doubleValue() > maxY) maxY = y.doubleValue();
+                    if (y.doubleValue() < minY) minY = y.doubleValue();
+                }
+            } else {
+                for (BigDecimal x : ((d1Object) obj).x) {
+                    if (x.doubleValue() > maxX) maxX = x.doubleValue();
+                    if (x.doubleValue() < minX) minX = x.doubleValue();
+                }
+                for (BigDecimal y : ((d2Object) obj).y) {
+                    if (y.doubleValue() > maxY) maxY = y.doubleValue();
+                    if (y.doubleValue() < minY) minY = y.doubleValue();
+                }
+                for (BigDecimal z : ((d3Object) obj).z) {
+                    if (z.doubleValue() > maxZ) maxZ = z.doubleValue();
+                    if (z.doubleValue() < minZ) minZ = z.doubleValue();
+                }
+            }
             renderer.objects.add(obj);
+        }
+
+        for (DrawableObject obj : renderer.objects) {
+            // we will now normalize each data value, since we knowthe min and max in each dimension.
+            // this will result is a value from [-1,1] which will we scale up to 500
+            int a = 0, b= 500;
+
+            if (points == 1) {
+                d1Object d1 = (d1Object) obj;
+                for (int i = 0; i < d1.timestamps.length; i++) {
+                    d1.x[i] = BigDecimal.valueOf(a + (d1.x[i].doubleValue() - minX) * (b - a) / (maxX - minX));
+                    System.out.println(d1);
+                }
+            } else if (points == 2) {
+                d2Object d2 = (d2Object) obj;
+                for (int i = 0; i < d2.timestamps.length; i++) {
+                    d2.x[i] = BigDecimal.valueOf(a + (d2.x[i].doubleValue() - minX) * (b - a) / (maxX - minX));
+                    d2.y[i] = BigDecimal.valueOf(a + (d2.y[i].doubleValue() - minY) * (b - a) / (maxY - minY));
+                    System.out.println(d2);
+                }
+            } else {
+                d3Object d3 = (d3Object) obj;
+                for (int i = 0; i < d3.timestamps.length; i++) {
+                    d3.x[i] = BigDecimal.valueOf(a + (d3.x[i].doubleValue() - minX) * (b - a) / (maxX - minX));
+                    d3.y[i] = BigDecimal.valueOf(a + (d3.y[i].doubleValue() - minY) * (b - a) / (maxY - minY));
+                    d3.z[i] = BigDecimal.valueOf(a + (d3.z[i].doubleValue() - minZ) * (b - a) / (maxZ - minZ));
+                    System.out.println(d3);
+                }
+            }
         }
 
         app.add(renderer);

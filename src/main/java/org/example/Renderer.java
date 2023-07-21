@@ -9,6 +9,11 @@ import java.util.Collection;
 public class Renderer extends JPanel {
 
     private int dimensions;
+
+    double xMin, xMax;
+    double yMin, yMax;
+    double zMin, zMax;
+
     public Renderer(int dimensions) {
         this.dimensions = dimensions;
     }

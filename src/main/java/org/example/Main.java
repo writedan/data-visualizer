@@ -16,7 +16,7 @@ import java.util.HashSet;
 import java.util.List;
 
 public class Main {
-    public static void main(String[] args) throws IOException, CsvException {
+    public static void main(String[] args) throws IOException, CsvException, InterruptedException {
         if (args.length < 1) {
             System.out.println("Usage: <data csv> ");
             System.exit(0);
@@ -34,6 +34,8 @@ public class Main {
         System.out.println();
         System.out.print("Select which to use as identifier: ");
         int id = Integer.parseInt(inputReader.readLine());
+        System.out.print("Select which to use as image: ");
+        int imagefield = Integer.parseInt(inputReader.readLine());
         System.out.print("Select which to use as timestamp (or leave black): ");
         String timestamp = inputReader.readLine();
 
@@ -65,7 +67,7 @@ public class Main {
 
         HashMap<String, DrawableObject> registry = new HashMap<>();
         for (String[] data : lines.subList(1, lines.size())) {
-            String identifier = data[id - 1];
+            String identifier = data[imagefield - 1];
             if (!registry.containsKey(identifier)) {
                 DrawableObject next;
                 if (points == 1) {
@@ -105,6 +107,7 @@ public class Main {
         double maxX = Double.MIN_VALUE, maxY = Double.MIN_VALUE, maxZ = Double.MIN_VALUE;
         double minX = Double.MAX_VALUE, minY = Double.MAX_VALUE, minZ = Double.MAX_VALUE;
         for (DrawableObject obj : registry.values()) {
+            System.out.println(obj);
             if (points == 1) {
                 for (BigDecimal x : ((d1Object)obj).x) {
                     if (x.doubleValue() > maxX) maxX = x.doubleValue();
@@ -136,14 +139,17 @@ public class Main {
             renderer.objects.add(obj);
         }
 
+        System.out.println("["+minX+","+maxX+"]");
+
         for (DrawableObject obj : renderer.objects) {
             // we will now normalize each data value, since we knowthe min and max in each dimension.
             // this will result is a value from [-1,1] which will we scale up to 500
-            int a = 900, b= 900;
+            int a = 0, b= 900;
 
             if (points == 1) {
                 d1Object d1 = (d1Object) obj;
                 for (int i = 0; i < d1.timestamps.length; i++) {
+                    System.out.println(a + (d1.x[i].doubleValue() - minX));
                     d1.x[i] = BigDecimal.valueOf(a + (d1.x[i].doubleValue() - minX) * (b - a) / (maxX - minX));
                 }
             } else if (points == 2) {

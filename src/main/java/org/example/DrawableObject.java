@@ -7,6 +7,7 @@ import java.time.LocalDateTime;
 
 public abstract class DrawableObject {
     public final String id;
+
     protected final LocalDate[] timestamps;
     protected int lastIndex;
 

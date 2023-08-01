@@ -11,6 +11,7 @@ import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -62,12 +63,15 @@ public class Main {
             }
         }
 
+        System.out.println(datetimes);
+
         int timeseriesNum = datetimes.size();
         if (timeseriesNum == 0) timeseriesNum = 1;
 
         HashMap<String, DrawableObject> registry = new HashMap<>();
         for (String[] data : lines.subList(1, lines.size())) {
             String identifier = data[imagefield - 1];
+            System.out.println("data[" + (imagefield - 1) + "] = ");
             if (!registry.containsKey(identifier)) {
                 DrawableObject next;
                 if (points == 1) {
@@ -94,6 +98,7 @@ public class Main {
                 pps[2] = BigDecimal.valueOf(Double.parseDouble(data[Integer.parseInt(datapoints[2]) - 1]));
             }
 
+            System.out.println(identifier + " ---- " + Arrays.asList(data));
             registry.get(identifier).putPoints(stamp, pps);
         }
 
@@ -141,6 +146,8 @@ public class Main {
 
         System.out.println("["+minX+","+maxX+"]");
 
+        renderer.index = 0;
+
         for (DrawableObject obj : renderer.objects) {
             // we will now normalize each data value, since we knowthe min and max in each dimension.
             // this will result is a value from [-1,1] which will we scale up to 500
@@ -164,5 +171,25 @@ public class Main {
         app.add(renderer);
 
         app.setVisible(true);
+
+        if (timeseries) {
+            new Thread(){
+                @Override
+                public void run() {
+                    while (true) {
+                        try {
+                            app.setTitle("Visualizer -- " + renderer.objects.get(0).timestamps[renderer.index]);
+                            renderer.index += 1;
+                            renderer.index %= 11;
+                            renderer.validate();
+                            renderer.repaint();
+                            Thread.sleep(1000);
+                        } catch (Exception e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+                }
+            }.start();
+        }
     }
 }

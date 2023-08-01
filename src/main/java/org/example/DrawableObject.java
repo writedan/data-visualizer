@@ -19,6 +19,10 @@ public abstract class DrawableObject {
     public abstract void putPoints(LocalDate timestamp, BigDecimal... decimals);
 
     protected void noteTimeStamp(LocalDate timestamp) {
+        for (LocalDate ld : timestamps) {
+            if (ld == null) continue;
+            if (ld.equals(timestamp)) return;
+        }
         timestamps[lastIndex] = timestamp;
     }
 }

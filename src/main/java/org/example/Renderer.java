@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 public class Renderer extends JPanel {
 
@@ -19,11 +20,13 @@ public class Renderer extends JPanel {
     double yMin, yMax;
     double zMin, zMax;
 
+    int index;
+
     public Renderer(int dimensions) {
         this.dimensions = dimensions;
     }
 
-    Collection<DrawableObject> objects = new ArrayList<>();
+    List<DrawableObject> objects = new ArrayList<>();
 
     protected void paintComponent(Graphics g) {
         System.out.println(g);
@@ -35,7 +38,7 @@ public class Renderer extends JPanel {
         for (DrawableObject doj : objects) {
             System.out.println(doj);
             if (dimensions == 1) {
-                int x = ((d1Object) doj).x[0].intValue();
+                int x = ((d1Object) doj).x[index].intValue();
 
                 try {
                     BufferedImage icon = ImageIO.read(new FileInputStream(doj.id));
@@ -50,8 +53,8 @@ public class Renderer extends JPanel {
                 }
 
             } else if (dimensions == 2) {
-                int x = ((d2Object) doj).x[0].intValue();
-                int y = ((d2Object) doj).y[0].intValue();
+                int x = ((d2Object) doj).x[index].intValue();
+                int y = ((d2Object) doj).y[index].intValue();
 
                 try {
                     BufferedImage icon = ImageIO.read(new FileInputStream(doj.id));

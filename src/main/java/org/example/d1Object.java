@@ -22,7 +22,7 @@ public class d1Object extends DrawableObject {
     public String toString() {
         String res = "(";
         for (int i = 0; i < timestamps.length; i++) {
-            res = res + x[i].toString() + " @ " + timestamps[i] + ", ";
+            res = res + String.valueOf(x[i]) + " @ " + timestamps[i] + ", ";
         }
         return res.substring(0, res.lastIndexOf(',')) + ")";
     }
